@@ -61,6 +61,10 @@ class ArticleViewController: UIViewController {
         tableView.backgroundColor = .systemBlue
         tableView.dataSource = self
         tableView.delegate = self
+       // tableView.rowHeight = UITableView.automaticDimension
+       // tableView.rowHeight = UITableView.automaticDimension
+        //tableView.contentSize
+        //tableView.estimatedRowHeight = 80
     }
 
 }
@@ -76,16 +80,31 @@ extension ArticleViewController: UITableViewDelegate, UITableViewDataSource {
         cell?.addView()
         
        // print(data[indexPath.row].title)
+       
+        
         cell?.text.text = data[indexPath.row].title
+        cell?.descr.text = data[indexPath.row].description
+        cell?.img.image = loadImage(url: (data[indexPath.row].img?.url)!)
+        cell?.layer.cornerRadius = 30
         return cell ?? UITableViewCell()
         
     }
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1;
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+       return 300
     }
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1;
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func loadImage(url: URL) -> UIImage? {
+        guard let data = try? Data(contentsOf: url) else {
+            return nil
+        }
+        return UIImage(data: data)
     }
 }
 

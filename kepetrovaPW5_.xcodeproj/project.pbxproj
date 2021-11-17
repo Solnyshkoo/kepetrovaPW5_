@@ -19,6 +19,7 @@
 		5E300D1127413078000F4405 /* ArticlePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E300D1027413078000F4405 /* ArticlePresenter.swift */; };
 		5E300D1327413697000F4405 /* ArticleWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E300D1227413697000F4405 /* ArticleWorker.swift */; };
 		5EDF5B4427453C2A00FEDC31 /* ArticleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EDF5B4327453C2A00FEDC31 /* ArticleCell.swift */; };
+		5EDF5B47274541B200FEDC31 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EDF5B46274541B200FEDC31 /* Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		5E300D1027413078000F4405 /* ArticlePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlePresenter.swift; sourceTree = "<group>"; };
 		5E300D1227413697000F4405 /* ArticleWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleWorker.swift; sourceTree = "<group>"; };
 		5EDF5B4327453C2A00FEDC31 /* ArticleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleCell.swift; sourceTree = "<group>"; };
+		5EDF5B46274541B200FEDC31 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				5E300D1027413078000F4405 /* ArticlePresenter.swift */,
 				5E300D0A27413034000F4405 /* ArticleModel.swift */,
 				5EDF5B4327453C2A00FEDC31 /* ArticleCell.swift */,
+				5EDF5B46274541B200FEDC31 /* Extension.swift */,
 				5E300CF627412FA8000F4405 /* SceneDelegate.swift */,
 				5E300D1227413697000F4405 /* ArticleWorker.swift */,
 				5E300D0E27413060000F4405 /* ArticleInteractor.swift */,
@@ -159,6 +162,7 @@
 				5E300D0B27413034000F4405 /* ArticleModel.swift in Sources */,
 				5E300CF527412FA8000F4405 /* AppDelegate.swift in Sources */,
 				5E300D092741301D000F4405 /* UIViewPin.swift in Sources */,
+				5EDF5B47274541B200FEDC31 /* Extension.swift in Sources */,
 				5E300CF727412FA8000F4405 /* SceneDelegate.swift in Sources */,
 				5EDF5B4427453C2A00FEDC31 /* ArticleCell.swift in Sources */,
 				5E300D1127413078000F4405 /* ArticlePresenter.swift in Sources */,

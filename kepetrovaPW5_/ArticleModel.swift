@@ -51,7 +51,7 @@ struct ArticleModel: Decodable{
                 case description = "announce"
                 case date = "date"
                 case requestId, img
-                //case img = "share_image_url" https://news.myseldon.com/api/Section?rubricId=4&pageSize=8&pageIndex=1
+                //case img = "share_image_url" //https://news.myseldon.com/api/Section?rubricId=4&pageSize=8&pageIndex=1
             }
         }
     }

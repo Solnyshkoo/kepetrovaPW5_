@@ -16,14 +16,14 @@ extension ArticleViewController: ArticleDisplayLogic {
     func displayData(articles: [ArticleModel.Fetch.ArticleView]) {
         self.data = articles
         DispatchQueue.main.async {
-           self.tableView.reloadData()
+            self.tableView.reloadData()
         }
         
     }
 }
 
 class ArticleViewController: UIViewController, WKUIDelegate {
-
+    
     private var interactor: ArticleBusinessLogic?
     
     private var router: (NSObjectProtocol & ArticleRoutingLogic & ArticleDataPassing)?
@@ -58,14 +58,14 @@ class ArticleViewController: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-    
-       
+        
+        
         interactor?.loadFreshNews(request: ArticleModel.Fetch.Request(rubricIndex: 4, pageIndex: 1))
-       
+        
         setupTableView()
     }
-                                                           
-  
+    
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         webView.frame = view.bounds
@@ -89,11 +89,11 @@ class ArticleViewController: UIViewController, WKUIDelegate {
         }
         return UIImage(data: data)
     }
-   
+    
 }
 
 extension ArticleViewController: UITableViewDelegate, UITableViewDataSource {
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
@@ -108,12 +108,12 @@ extension ArticleViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       return 300
+        return 300
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(closeWeb(sender:)))
-
+        
         view.addSubview(webView)
         webView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
         webView.pinRight(to: view)
@@ -132,34 +132,33 @@ extension ArticleViewController: UITableViewDelegate, UITableViewDataSource {
         let article = self.data[(indexPath as NSIndexPath).row] as ArticleModel.Fetch.ArticleView
         
         let shareAction = UIContextualAction(style: .normal, title: "Share") {
-                   (action, sourceView, completionHandler) in
-                   self.swipeShareAction(article, indexPath: indexPath)
-                   completionHandler(true)
-               }
+            (action, sourceView, completionHandler) in
+            self.swipeShareAction(article, indexPath: indexPath)
+            completionHandler(true)
+        }
         shareAction.backgroundColor = UIColor(red: 28.0/255.0, green: 165.0/255.0, blue: 253.0/255.0, alpha: 1.0)
-
+        
         let swipeConfiguration = UISwipeActionsConfiguration(actions: [shareAction])
-        //swipeConfiguration.performsFirstActionWithFullSwipe = false
         return swipeConfiguration
     }
     
     fileprivate func swipeShareAction(_ article: ArticleModel.Fetch.ArticleView, indexPath: IndexPath) {
         
-            let uploadItems = [article.articleUrl as AnyObject]
+        let uploadItems = [article.articleUrl as AnyObject]
         
-           
+        
         let activityController = UIActivityViewController(activityItems: uploadItems, applicationActivities: nil)
-
-
-           if let popoverController = activityController.popoverPresentationController {
-               if let cell = tableView.cellForRow(at: indexPath) {
-                   popoverController.sourceView = cell
-                   popoverController.sourceRect = cell.bounds  // popup under/over cell, not top corner
-               }
-           }
-           self.present(activityController, animated: true, completion: nil)
-           
-       }
+        
+        
+        if let popoverController = activityController.popoverPresentationController {
+            if let cell = tableView.cellForRow(at: indexPath) {
+                popoverController.sourceView = cell
+                popoverController.sourceRect = cell.bounds
+            }
+        }
+        self.present(activityController, animated: true, completion: nil)
+        
+    }
 }
 
 

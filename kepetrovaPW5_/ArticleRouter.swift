@@ -11,7 +11,6 @@ import UIKit
 
 @objc protocol ArticleRoutingLogic
 {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
 }
 
 protocol ArticleDataPassing

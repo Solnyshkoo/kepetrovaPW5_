@@ -37,8 +37,6 @@ class ArticleWorker {
             }
             completion(result)
         }.resume()
-       
-        
     }
    
 }

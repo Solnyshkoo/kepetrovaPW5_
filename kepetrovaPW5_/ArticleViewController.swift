@@ -6,18 +6,31 @@
 //
 
 import UIKit
+import WebKit
 
 protocol ArticleDisplayLogic: AnyObject {
     func displayData(articles: [ArticleModel.Fetch.ArticleView])
 }
 
-class ArticleViewController: UIViewController {
+extension ArticleViewController: ArticleDisplayLogic {
+    func displayData(articles: [ArticleModel.Fetch.ArticleView]) {
+        self.data = articles
+        DispatchQueue.main.async {
+           self.tableView.reloadData()
+        }
+        
+    }
+}
+
+class ArticleViewController: UIViewController, WKUIDelegate {
 
     private var interactor: ArticleBusinessLogic?
     
     private var router: (NSObjectProtocol & ArticleRoutingLogic & ArticleDataPassing)?
     
     private var data: [ArticleModel.Fetch.ArticleView] = []
+    
+    var webView = WKWebView()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -45,9 +58,17 @@ class ArticleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        interactor?.loadFreshNews(request: ArticleModel.Fetch.Request(rubricIndex: 4, pageIndex: 1))
-        setupTableView()
+    
        
+        interactor?.loadFreshNews(request: ArticleModel.Fetch.Request(rubricIndex: 4, pageIndex: 1))
+       
+        setupTableView()
+    }
+                                                           
+  
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        webView.frame = view.bounds
     }
     let tableView = UITableView()
     
@@ -58,15 +79,17 @@ class ArticleViewController: UIViewController {
         tableView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
         tableView.pinBottom(to: view.safeAreaLayoutGuide.bottomAnchor)
         tableView.pin(to: view, .left, .right)
-        tableView.backgroundColor = .systemBlue
         tableView.dataSource = self
         tableView.delegate = self
-       // tableView.rowHeight = UITableView.automaticDimension
-       // tableView.rowHeight = UITableView.automaticDimension
-        //tableView.contentSize
-        //tableView.estimatedRowHeight = 80
     }
-
+    
+    func loadImage(url: URL) -> UIImage? {
+        guard let data = try? Data(contentsOf: url) else {
+            return nil
+        }
+        return UIImage(data: data)
+    }
+   
 }
 
 extension ArticleViewController: UITableViewDelegate, UITableViewDataSource {
@@ -78,42 +101,65 @@ extension ArticleViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as? ArticleCell
         cell?.addView()
-        
-       // print(data[indexPath.row].title)
-       
-        
         cell?.text.text = data[indexPath.row].title
         cell?.descr.text = data[indexPath.row].description
         cell?.img.image = loadImage(url: (data[indexPath.row].img?.url)!)
-        cell?.layer.cornerRadius = 30
         return cell ?? UITableViewCell()
         
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
        return 300
     }
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1;
-//    }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(closeWeb(sender:)))
+
+        view.addSubview(webView)
+        webView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
+        webView.pinRight(to: view)
+        webView.pinBottom(to: view.safeAreaLayoutGuide.bottomAnchor)
+        let url = data[indexPath.row].articleUrl
+        webView.load(URLRequest(url: url!))
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func loadImage(url: URL) -> UIImage? {
-        guard let data = try? Data(contentsOf: url) else {
-            return nil
-        }
-        return UIImage(data: data)
+    @objc func closeWeb(sender: UIBarButtonItem){
+        webView.removeFromSuperview()
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let article = self.data[(indexPath as NSIndexPath).row] as ArticleModel.Fetch.ArticleView
+        
+        let shareAction = UIContextualAction(style: .normal, title: "Share") {
+                   (action, sourceView, completionHandler) in
+                   self.swipeShareAction(article, indexPath: indexPath)
+                   completionHandler(true)
+               }
+        shareAction.backgroundColor = UIColor(red: 28.0/255.0, green: 165.0/255.0, blue: 253.0/255.0, alpha: 1.0)
+
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [shareAction])
+        //swipeConfiguration.performsFirstActionWithFullSwipe = false
+        return swipeConfiguration
+    }
+    
+    fileprivate func swipeShareAction(_ article: ArticleModel.Fetch.ArticleView, indexPath: IndexPath) {
+        
+            let uploadItems = [article.articleUrl as AnyObject]
+        
+           
+        let activityController = UIActivityViewController(activityItems: uploadItems, applicationActivities: nil)
+
+
+           if let popoverController = activityController.popoverPresentationController {
+               if let cell = tableView.cellForRow(at: indexPath) {
+                   popoverController.sourceView = cell
+                   popoverController.sourceRect = cell.bounds  // popup under/over cell, not top corner
+               }
+           }
+           self.present(activityController, animated: true, completion: nil)
+           
+       }
 }
 
-extension ArticleViewController: ArticleDisplayLogic {
-    func displayData(articles: [ArticleModel.Fetch.ArticleView]) {
-        self.data = articles
-        DispatchQueue.main.async {
-           self.tableView.reloadData()
-        }
-        
-    }
-}
+

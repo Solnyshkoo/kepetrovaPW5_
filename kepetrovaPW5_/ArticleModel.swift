@@ -11,14 +11,14 @@ import UIKit
 
 struct ArticleModel: Decodable{
     struct Fetch: Decodable {
-        struct Request: Decodable
-        {
+        
+        struct Request: Decodable {
             var rubricIndex: Int?
             var pageIndex: Int?
             
         }
-        struct Response: Decodable
-        {
+        
+        struct Response: Decodable {
             var news: [ArticleView]?
             var requestId: String?
             mutating func passTheRequestId() {
@@ -27,12 +27,12 @@ struct ArticleModel: Decodable{
                 }
             }
         }
-        struct ImageContainer: Decodable
-        {
+        
+        struct ImageContainer: Decodable {
             var url: URL?
         }
-        struct ArticleView: Decodable
-        {
+        
+        struct ArticleView: Decodable {
             var articleId: Int?
             var title: String
             var description: String

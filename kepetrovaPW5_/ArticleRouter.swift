@@ -17,11 +17,11 @@ protocol ArticleDataPassing
 {
     var dataStore: ArticleDataStore? { get }
 }
-
+// MARK: Routing
 class ArticleRouter: NSObject, ArticleRoutingLogic, ArticleDataPassing
 {
     weak var viewController: ArticleViewController?
     var dataStore: ArticleDataStore?
     
-    // MARK: Routing
+    
 }

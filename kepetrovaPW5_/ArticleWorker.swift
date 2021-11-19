@@ -10,7 +10,7 @@ enum ObtainPostsResult {
     case success(posts: ArticleModel.Fetch.Response)
     case failure(error: Error)
 }
-
+// MARK: - Request
 class ArticleWorker {
     
     func fetch(rubricIndex: Int?, pageIndex: Int?, completion: @escaping (ObtainPostsResult) -> Void)
